@@ -1,9 +1,16 @@
 
 You need to find the atomic block the given element belongs to 
-you will be provided with the atomic number of element and you need to return its block {'s','p','d','f'}.
-Block is defined by the last electron is filled into
-you need to find block by simulating the Aufbau principle
-{Note:Electrons fill atomic orbitals starting from the lowest energy level to the highest — like building up floors in a building ("Aufbau" means "building up" in German).)
+you are given with the atomic number of element and  need to return its block {'s','p','d','f'}.
+
+Block is determined by the letter of the last subshell in which the last electron is placed.
+
+If the last electron goes into an s-orbital -> s (block)
+If the last electron goes into a p-orbital -> p (block)
+If the last electron goes into a d-orbital -> d (block)
+If the last electron goes into an f-orbital -> f (block)
+
+Block is found by simulating the Aufbau principle
+{Note:in Aufabu priciple electrons are filled in  increasing order of the atomic orbits}
 Prerequisite:
 orbital order is 1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, 5s, 4d, 5p, 6s, 4f, 5d, 6p, 7s, 5f, 6d, 7p
 and capacity of each is s:2, p:6, d:10, f:14
