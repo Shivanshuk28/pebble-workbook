@@ -14,8 +14,8 @@ def traitDecider(fathers_trait,mothers_trait):
     allTraits = set(fathers_trait.keys()) | set(mothers_trait.keys())
     
     for x in allTraits:
-        fatherValue=fathers_trait.get(x,"")
-        motherValue=mothers_trait.get(x,"")
+        fatherValue=fathers_trait.get(x,"").strip()
+        motherValue=mothers_trait.get(x,"").strip()
         
         #cal capital  letter in each trait
         countOfFatherCapital= sum( 1 for ch in fatherValue if ch.isupper())

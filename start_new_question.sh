@@ -14,7 +14,7 @@ fi
 
 LANG="$1"
 ENTRYPOINT="$2"
-ID=$(python3 -c "import uuid; print(str(uuid.uuid4()))")
+ID=$(python -c "import uuid; print(str(uuid.uuid4()))")
 
 case "$LANG" in
 	java)

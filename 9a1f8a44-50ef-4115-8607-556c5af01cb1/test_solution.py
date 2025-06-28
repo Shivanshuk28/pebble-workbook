@@ -198,8 +198,8 @@ def test_eight():
     result= traitDecider(fatherTraits,motherTraits)
     if (result != expected):
         print("Test 9 FAILED")
-        print("Expected: "+expected)
-        print("Actual :" +result)
+        print("Expected: "+str(expected))
+        print("Actual :" +str(result))
     assert traitDecider(fatherTraits,motherTraits)==expected
     
     
@@ -230,24 +230,24 @@ def test_nine():
     
 #last : special characters and numbers
 def test_ten():
-    fatherTraits={
-        "hair_color":"123",
-        "eye_color":"B!U@E",
-        "blood_type":"o+"
+    # trailing whitespaces and starting/leading whitespaces
+#one parent with trait other with out any trait
+    fathers_trait={
+        "personality":"   kiND   ",
+        "eye_color":"  GReeN"
     }
-    motherTraits={
-        "hair_color":"BL4CK",
-        "eye_color":"G#E%N",
-        "blood_type":"AB+"
+    mothers_trait={
+        "personality":"smART            ",
+        "eye_color":"             BrOWN"
     }
     expected={
-        "hair_color":"BL4CK",
-        "eye_color":"B!U@E",
-        "blood_type":"AB+"
+        "personality":"smART",
+        "eye_color":"BrOWN"
     }
-    result= traitDecider(fatherTraits,motherTraits)
-    if (result != expected):
-        print("Test 10 FAILED")
+    result= traitDecider(fathers_trait,mothers_trait)
+    if(result!=expected):
+        print("Test 10 Failed")
         print("Expected: "+expected)
-        print("Actual :" +result)
-    assert traitDecider(fatherTraits,motherTraits)==expected
+        print("Actual : "+result)
+
+    assert traitDecider(fathers_trait,mothers_trait)== expected
