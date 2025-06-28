@@ -1,0 +1,19 @@
+
+You need to find the atomic block the given element belongs to 
+you will be provided with the atomic number of element and you need to return its block {'s','p','d','f'}.
+Block is defined by the last electron is filled into
+you need to find block by simulating the Aufbau principle
+{Note:Electrons fill atomic orbitals starting from the lowest energy level to the highest — like building up floors in a building ("Aufbau" means "building up" in German).)
+Prerequisite:
+orbital order is 1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, 5s, 4d, 5p, 6s, 4f, 5d, 6p, 7s, 5f, 6d, 7p
+and capacity of each is s:2, p:6, d:10, f:14
+
+ex:
+ ex1:Atomic number Z = 11.
+	explanation:1s² 2s² 2p⁶ 3s¹
+	Output: s-block
+ex2: Atomic number Z = 21
+	explanation: 1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹
+	output: d-block
+
+**Leave aside the scientific exceptions for this problem.
