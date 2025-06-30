@@ -1,73 +1,206 @@
-Of course. Here is a detailed breakdown of the normal cases, edge cases, and robustness checks for the "Faulty Server Locator" problem. This is a crucial part of software development—thinking about what could go wrong is just as important as writing the code for what should go right.
+You're looking for a structured, manual test case format that includes direct comparison and immediate feedback for failures, similar to what you'd see in a simple testing script without a full testing framework (like `pytest`).
 
----
+Here's how to write those test cases for `find_faulty_servers` using your desired format. I'll include the solution code for `find_faulty_servers` again for completeness, using the list comprehension version as it's more Pythonic.
 
-### Normal Test Cases (The "Happy Path")
+```python
+# --- Solution for find_faulty_servers (from previous response) ---
+def find_faulty_servers(status_codes):
+    """
+    Identifies the indices of faulty servers from a list of status codes.
+    A server is considered **faulty** if its HTTP status code is in the
+    500-599 range (a server-side error).
+    """
+    return [
+        index for index, code in enumerate(status_codes) if 500 <= code <= 599
+    ]
 
-These cases test the primary, expected functionality of the program. A correct solution must pass all of these.
+# --- Test Cases for find_faulty_servers ---
 
-**1. A Mix of Good and Faulty Servers**
-*   **Case:** The input contains a typical mix of working servers (`2xx` codes) and faulty servers (`5xx` codes). This is the most standard scenario.
-*   **Input:** `[200, 201, 503, 404, 204, 500]`
-*   **Reasoning:** Tests the core logic. It should correctly identify the `5xx` codes while ignoring `2xx` and `4xx` codes. The `404` is important to include to ensure client-side errors aren't flagged.
-*   **Expected Output:** `[2, 5]`
+print("--- Running Tests for find_faulty_servers ---")
 
-**2. Only Faulty Servers**
-*   **Case:** Every server in the rack has failed.
-*   **Input:** `[500, 501, 502, 503]`
-*   **Reasoning:** Ensures the logic works correctly when every single item in the list meets the condition.
-*   **Expected Output:** `[0, 1, 2, 3]`
+# Test Case 1: A Mix of Good and Faulty Servers (Normal Case 1)
+test_name = "Test 1: Mixed Good and Faulty Servers"
+input_codes = [200, 201, 503, 404, 204, 500]
+expected_output = [2, 5]
+actual_output = find_faulty_servers(input_codes)
 
-**3. Faulty Servers at the Beginning and End**
-*   **Case:** The faulty servers are the very first and very last items in the list.
-*   **Input:** `[502, 200, 201, 302, 504]`
-*   **Reasoning:** This checks for "off-by-one" errors and ensures the loop correctly handles the boundaries of the list (index `0` and index `len(list) - 1`).
-*   **Expected Output:** `[0, 4]`
+if actual_output != expected_output:
+    print(f"{test_name} FAILED")
+    print("Input   :", input_codes)
+    print("Expected:", expected_output)
+    print("Actual  :", actual_output)
+assert actual_output == expected_output, f"{test_name} failed assertion."
+print(f"{test_name} PASSED")
 
----
+# Test Case 2: Only Faulty Servers (Normal Case 2)
+test_name = "Test 2: Only Faulty Servers"
+input_codes = [500, 501, 502, 503]
+expected_output = [0, 1, 2, 3]
+actual_output = find_faulty_servers(input_codes)
 
-### Edge Cases
+if actual_output != expected_output:
+    print(f"{test_name} FAILED")
+    print("Input   :", input_codes)
+    print("Expected:", expected_output)
+    print("Actual  :", actual_output)
+assert actual_output == expected_output, f"{test_name} failed assertion."
+print(f"{test_name} PASSED")
 
-These cases test the boundaries, limits, and unusual (but valid) conditions of the problem. A robust solution should handle these gracefully.
+# Test Case 3: Faulty Servers at Beginning and End (Normal Case 3)
+test_name = "Test 3: Faulty Servers at Boundaries"
+input_codes = [502, 200, 201, 302, 504]
+expected_output = [0, 4]
+actual_output = find_faulty_servers(input_codes)
 
-**1. No Faulty Servers**
-*   **Case:** All servers are functioning correctly or have non-server errors.
-*   **Input:** `[200, 201, 404, 301, 204]`
-*   **Reasoning:** This is a critical edge case. The program must return an empty list and not crash or return `None`. It tests the "no matches found" scenario.
-*   **Expected Output:** `[]`
+if actual_output != expected_output:
+    print(f"{test_name} FAILED")
+    print("Input   :", input_codes)
+    print("Expected:", expected_output)
+    print("Actual  :", actual_output)
+assert actual_output == expected_output, f"{test_name} failed assertion."
+print(f"{test_name} PASSED")
 
-**2. Empty Input List**
-*   **Case:** The health-check script returns an empty list, perhaps because the rack is offline or has no servers.
-*   **Input:** `[]`
-*   **Reasoning:** This is the ultimate boundary test. The code should not throw an error when given an empty list. It should simply do nothing and return an empty list.
-*   **Expected Output:** `[]`
+# Test Case 4: No Faulty Servers (Edge Case 1)
+test_name = "Test 4: No Faulty Servers"
+input_codes = [200, 201, 404, 301, 204]
+expected_output = []
+actual_output = find_faulty_servers(input_codes)
 
-**3. Boundary Value Codes**
-*   **Case:** The input includes status codes that are exactly on or just outside the boundaries of the "faulty" range (`500`-`599`).
-*   **Input:** `[499, 500, 599, 600]`
-*   **Reasoning:** This directly tests the conditional logic (`>= 500 and <= 599`). It's very easy to make a mistake with `>` vs `>=` or `<` vs `<=`. This test will catch that.
-*   **Expected Output:** `[1, 2]`
+if actual_output != expected_output:
+    print(f"{test_name} FAILED")
+    print("Input   :", input_codes)
+    print("Expected:", expected_output)
+    print("Actual  :", actual_output)
+assert actual_output == expected_output, f"{test_name} failed assertion."
+print(f"{test_name} PASSED")
 
-**4. Large Input List**
-*   **Case:** The input list is very long, simulating a large data center.
-*   **Input:** A list with 10,000 status codes, with a few `5xx` codes scattered within.
-*   **Reasoning:** This is a performance consideration. While the simple loop solution is efficient enough (`O(n)`), it's good practice to consider how the code would perform at scale. The logic should not change.
-*   **Expected Output:** A list of the correct indices, however many there are.
+# Test Case 5: Empty Input List (Edge Case 2)
+test_name = "Test 5: Empty Input List"
+input_codes = []
+expected_output = []
+actual_output = find_faulty_servers(input_codes)
 
----
+if actual_output != expected_output:
+    print(f"{test_name} FAILED")
+    print("Input   :", input_codes)
+    print("Expected:", expected_output)
+    print("Actual  :", actual_output)
+assert actual_output == expected_output, f"{test_name} failed assertion."
+print(f"{test_name} PASSED")
 
-### Robustness / Invalid Input Checks
+# Test Case 6: Boundary Value Codes (Edge Case 3)
+test_name = "Test 6: Boundary Value Codes"
+input_codes = [499, 500, 599, 600, 200]
+expected_output = [1, 2]
+actual_output = find_faulty_servers(input_codes)
 
-These cases are technically outside the problem's strict definition ("a list of integers"), but a truly production-ready function would consider them.
+if actual_output != expected_output:
+    print(f"{test_name} FAILED")
+    print("Input   :", input_codes)
+    print("Expected:", expected_output)
+    print("Actual  :", actual_output)
+assert actual_output == expected_output, f"{test_name} failed assertion."
+print(f"{test_name} PASSED")
 
-**1. List with Non-Integer Data Types**
-*   **Case:** The data is corrupted and contains strings or other types.
-*   **Input:** `[200, 503, "error", 404]`
-*   **Reasoning:** What should happen? In most languages (like Python), comparing a string to an integer (`"error" >= 500`) will raise a `TypeError`. A robust function might use a `try-except` block to ignore invalid entries.
-*   **Expected Behavior:** The function should ideally not crash. It could either ignore the bad data (`return [1]`) or raise a more specific error.
+# Test Case 7: Large Input List (Edge Case 4 - Conceptual)
+# For this, we'll create a large list programmatically.
+# A realistic test would have a much larger size.
+test_name = "Test 7: Large Input List"
+# Create a list of 1000 codes, with 500 at index 100 and 503 at index 800
+large_input_codes = [200] * 1000
+large_input_codes[100] = 500
+large_input_codes[800] = 503
+expected_large_output = [100, 800]
+actual_large_output = find_faulty_servers(large_input_codes)
 
-**2. Input is Not a List**
-*   **Case:** The function is called with the wrong type of argument entirely.
-*   **Input:** `find_faulty_servers(503)` or `find_faulty_servers("all good")`
-*   **Reasoning:** The function expects an iterable list. Calling it with a single integer or a string will cause a `TypeError`. A production function should validate its input types.
-*   **Expected Behavior:** The function should fail, but ideally with a clear error message (e.g., `TypeError: Input must be a list`).
+if actual_large_output != expected_large_output:
+    print(f"{test_name} FAILED")
+    print("Input has ... (large list)")
+    print("Expected:", expected_large_output)
+    print("Actual  :", actual_large_output)
+assert actual_large_output == expected_large_output, f"{test_name} failed assertion."
+print(f"{test_name} PASSED")
+
+
+# --- Robustness / Invalid Input Checks (Requires modification to find_faulty_servers) ---
+# The current find_faulty_servers function does NOT handle these gracefully by design.
+# To handle these, you would add try-except blocks or type checks inside find_faulty_servers.
+
+def find_faulty_servers_robust(status_codes):
+    """
+    A more robust version of find_faulty_servers that handles non-list input
+    and non-integer items within the list.
+    """
+    if not isinstance(status_codes, list):
+        raise TypeError("Input must be a list of status codes.")
+
+    faulty_indices = []
+    for index, code in enumerate(status_codes):
+        try:
+            # Ensure the code is an integer before comparison
+            if isinstance(code, int) and 500 <= code <= 599:
+                faulty_indices.append(index)
+            # Optionally, you could print a warning for non-integer items:
+            # elif not isinstance(code, int):
+            #     print(f"Warning: Non-integer item '{code}' found at index {index}. Skipping.")
+        except TypeError:
+            # This handles cases where comparison itself fails (e.g., if 'code' was a complex object)
+            print(f"Warning: Could not process item '{code}' at index {index} due to type error. Skipping.")
+            continue
+    return faulty_indices
+
+print("\n--- Running Robustness Tests (with robust function) ---")
+
+# Test Case 8: List with Non-Integer Data Types (Robustness Case 1)
+test_name = "Test 8: List with Non-Integer Data Types"
+input_codes = [200, 503, "error", 404, None, 500]
+expected_output = [1, 5] # Only 503 and 500 should be detected
+actual_output = find_faulty_servers_robust(input_codes)
+
+if actual_output != expected_output:
+    print(f"{test_name} FAILED")
+    print("Input   :", input_codes)
+    print("Expected:", expected_output)
+    print("Actual  :", actual_output)
+assert actual_output == expected_output, f"{test_name} failed assertion."
+print(f"{test_name} PASSED")
+
+# Test Case 9: Input is Not a List (Robustness Case 2)
+test_name = "Test 9: Input is Not a List"
+input_codes_int = 503
+input_codes_str = "all good"
+
+# Test for int input
+try:
+    find_faulty_servers_robust(input_codes_int)
+    print(f"{test_name} (int) FAILED: Expected TypeError, but none occurred.")
+except TypeError as e:
+    print(f"{test_name} (int) PASSED: Correctly raised TypeError: {e}")
+except Exception as e:
+    print(f"{test_name} (int) FAILED: Raised unexpected error: {type(e).__name__}: {e}")
+
+# Test for string input
+try:
+    find_faulty_servers_robust(input_codes_str)
+    print(f"{test_name} (str) FAILED: Expected TypeError, but none occurred.")
+except TypeError as e:
+    print(f"{test_name} (str) PASSED: Correctly raised TypeError: {e}")
+except Exception as e:
+    print(f"{test_name} (str) FAILED: Raised unexpected error: {type(e).__name__}: {e}")
+
+print("\n--- All tests completed ---")
+```
+
+**Key Points in this Test Structure:**
+
+1.  **`test_name` Variable:** Makes it easy to identify which test is running and which one failed.
+2.  **`input_codes`:** Clearly defines the input for each test.
+3.  **`expected_output`:** Crucially, defines what the function *should* return. This is the "oracle" for your test.
+4.  **`actual_output`:** Stores the result of calling your function with the input.
+5.  **`if actual_output != expected_output` block:** This is your detailed failure message. It prints the input, expected, and actual results, which is invaluable for debugging.
+6.  **`assert actual_output == expected_output`:** This line is the core of the test. If the condition is false, it raises an `AssertionError`, stopping the script and clearly indicating a failure. The `f-string` message adds more context to the assertion error.
+7.  **`print(f"{test_name} PASSED")`:** A simple confirmation for passing tests.
+
+**Important Note on Robustness Tests:**
+
+The `find_faulty_servers` solution provided earlier (and typically in coding challenges) assumes valid inputs (lists of integers). To handle "Robustness / Invalid Input Checks" (like non-integer elements or non-list input), you need to modify the `find_faulty_servers` function itself to include input validation and error handling (as shown in `find_faulty_servers_robust`). Without those modifications, the original function would indeed raise `TypeError`s, which might be the *expected behavior* if the problem statement doesn't require graceful handling of invalid types. For real-world code, adding such robustness is highly recommended.
